@@ -1,9 +1,10 @@
 
-from transformers import pipeline
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer
 
-summarizer = pipeline("summarization", model="t5-small")
-
-def summarize_text(text, summary_type="quick"):
-    max_len = 130 if summary_type == "quick" else 300
-    result = summarizer(text[:1000], max_length=max_len, min_length=30, do_sample=False)
-    return result[0]['summary_text']
+def summarize_text(text, sentence_count=5):
+    parser = PlaintextParser.from_string(text, Tokenizer("english"))
+    summarizer = LsaSummarizer()
+    summary = summarizer(parser.document, sentence_count)
+    return [str(sentence) for sentence in summary]

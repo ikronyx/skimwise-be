@@ -9,4 +9,4 @@ textblob
 scikit-learn
 spacy
 nltk
-torch
+sumy
